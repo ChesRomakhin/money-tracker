@@ -1,7 +1,19 @@
+interface ComplexBeanDependency {
+  dependencyName: string;
+  beanClass: any;
+}
+
+type BeanDependency = string | ComplexBeanDependency;
+
 interface BeanDefinition {
   beanName: string;
   beanClass: any;
-  dependencies: string[];
+  dependencies: BeanDependency[];
+}
+
+interface ResolvedDependency {
+  name: string;
+  value: any;
 }
 
 export class ApplicationContext {
@@ -9,7 +21,7 @@ export class ApplicationContext {
   private context = new Map<string, any>();
   private beanDefinitions = new Map<string, BeanDefinition>();
 
-  addBeanDefinition(beanName: string, beanClass: any, dependencies: string[]) {
+  addBeanDefinition(beanName: string, beanClass: any, dependencies: BeanDependency[]) {
     this.beanDefinitions.set(beanName, {
       beanName,
       beanClass,
@@ -17,7 +29,7 @@ export class ApplicationContext {
     });
   }
 
-  getBean<T>(beanName: string): T {
+  getBeanByName<T>(beanName: string): T {
     if (this.context.has(beanName)) {
       return this.context.get(beanName);
     } else {
@@ -26,25 +38,43 @@ export class ApplicationContext {
         this.context.set(beanName, bean);
         return bean;
       } else {
-        throw Error(`No bean with name '${beanName}'`)
+        throw Error(`No bean with name '${beanName}'`);
       }
     }
   }
 
+  private resolveDependency(dependency: BeanDependency): ResolvedDependency {
+    if (typeof dependency === "string") {
+      return {name: dependency, value: this.getBeanByName(dependency as string)};
+    } else {
+      return {name: dependency.dependencyName, value: this.getBeansByClass(dependency.beanClass)};
+    }
+  }
+
+  getBeansByClass(type: any): any[] {
+    const beans: any[] = [];
+
+    for (const [name, definition] of this.beanDefinitions) {
+      if (type.isPrototypeOf(definition.beanClass)) {
+        beans.push(this.getBeanByName(name));
+      }
+    }
+
+    return beans;
+  }
+
   private createBean<T>(beanName: string): T {
     if (!this.beanDefinitions.has(beanName)) {
-      throw new Error(`No bean definition found for '${beanName}'`)
+      throw new Error(`No bean definition found for '${beanName}'`);
     }
 
     const {beanClass, dependencies} = this.beanDefinitions.get(beanName) as BeanDefinition;
 
-    const dependenciesArg = dependencies.map(dependency => ({beanName: dependency, bean: this.getBean(dependency)}))
+    const dependenciesArg = dependencies.map(dependency => this.resolveDependency(dependency))
       .reduce((accumulator, currentValue) => ({
         ...accumulator,
-        [currentValue.beanName]: currentValue.bean,
+        [currentValue.name]: currentValue.value
       }), {} as any);
-
-    console.warn(dependenciesArg);
 
     return new beanClass(dependenciesArg);
   }

@@ -6,7 +6,7 @@ export class AccountInMemoryRepository implements Repository<string, Account> {
 
   private accounts: Account[] = [];
 
-  constructor(dependencies: any) {
+  constructor(dependencies: {}) {
     this.accounts = [];
 
     this.create({
