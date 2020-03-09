@@ -1,13 +1,11 @@
 import * as React from "react";
-import {useContext, useState} from "react";
-import {ApplicationReactContext} from "../../App";
+import {useState} from "react";
 import {CommandService} from "../Service/CommandService";
+import {useGreenBean} from "../../GreenBean/React/hook/useGreenBean";
 
 export const CommandInput = () => {
   const [value, setValue] = useState<string>("");
-
-  const applicationContext = useContext(ApplicationReactContext);
-  const commandService = applicationContext.getBeanByName<CommandService>("commandService");
+  const commandService = useGreenBean<CommandService>("commandService");
 
   return (<div>
     <span>privet</span>

@@ -1,4 +1,4 @@
-import {ApplicationContext} from "./ApplicationContext/ApplicationContext";
+import {ApplicationContext} from "./GreenBean/ApplicationContext/ApplicationContext";
 import {AccountService} from "./Account/AccountService";
 import {AccountInMemoryRepository} from "./Account/AccountInMemoryRepository";
 import {Command} from "./Command/Command";

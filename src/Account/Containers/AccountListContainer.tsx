@@ -1,15 +1,14 @@
 import * as React from "react";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {AccountListComponent} from "../Components/AccountListComponent";
-import {ApplicationReactContext} from "../../App";
 import {AccountService} from "../AccountService";
 import {Account} from "../Account";
-import {Observable} from "rxjs";
 import {useObservable} from "../../hook/useObservable";
+import {useGreenBean} from "../../GreenBean/React/hook/useGreenBean";
+import {Observable} from "rxjs";
 
 export const AccountListContainer = () => {
-  const applicationContext = useContext(ApplicationReactContext);
-  const accountService = applicationContext.getBeanByName<AccountService>("accountService");
+  const accountService = useGreenBean<AccountService>("accountService");
   const [observable, setObservable] = useState<Observable<Account[]>>(accountService.observeAccounts());
 
   useEffect(() => {

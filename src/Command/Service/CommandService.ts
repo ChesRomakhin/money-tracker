@@ -1,5 +1,5 @@
-export interface CommandService {
+export abstract class CommandService {
 
-  submit(text: string): void;
+  abstract submit(text: string): void;
 
 }

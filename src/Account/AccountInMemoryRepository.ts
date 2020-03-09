@@ -1,18 +1,14 @@
-import {Account} from './Account';
-import {v4} from 'uuid';
-import {Repository} from "../Repository/Repository";
+import {Account} from "./Account";
+import {v4} from "uuid";
+import {AccountRepository} from "./AccountRepository";
 
-export class AccountInMemoryRepository implements Repository<string, Account> {
+export class AccountInMemoryRepository extends AccountRepository {
 
   private accounts: Account[] = [];
 
   constructor(dependencies: {}) {
+    super();
     this.accounts = [];
-
-    this.create({
-      name: 'Test account',
-      amount: 100,
-    });
   }
 
   create(entity: Partial<Account>): Account {
@@ -68,7 +64,7 @@ export class AccountInMemoryRepository implements Repository<string, Account> {
   getAll(ids: string): Account[];
   getAll(ids?: string): Account[] {
     if (!ids) {
-      return this.accounts;
+      return [...this.accounts];
     } else {
       return this.accounts.filter(account => ids.indexOf(account.id) !== -1);
     }

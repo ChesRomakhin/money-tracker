@@ -1,28 +1,48 @@
-export interface SingleRepository<I, T> {
+export abstract class SingleRepository<I, T> {
 
-  create(entity: Partial<T>): T;
+  abstract create(entity: Partial<T>): T;
 
-  get(id: I): T | null;
+  abstract get(id: I): T | null;
 
-  update(entity: T): T;
+  abstract update(entity: T): T;
 
-  delete(id: I): void;
-
-}
-
-export interface ListRepository<I, T> {
-
-  createAll(entities: T[]): T[];
-
-  getAll(): T[];
-
-  getAll(ids: I): T[];
-
-  updateAll(entities: T[]): T[];
-
-  deleteAll(ids: I): void;
+  abstract delete(id: I): void;
 
 }
 
-export interface Repository<I, T> extends SingleRepository<I, T>, ListRepository<I, T> {
+export abstract class ListRepository<I, T> {
+
+  abstract createAll(entities: T[]): T[];
+
+  abstract getAll(): T[];
+
+  abstract getAll(ids: I): T[];
+
+  abstract updateAll(entities: T[]): T[];
+
+  abstract deleteAll(ids: I): void;
+
+}
+
+interface IRepository<I, T> extends SingleRepository<I, T>, ListRepository<I, T> {
+}
+
+export abstract class Repository<I, T> implements IRepository<I, T>{
+  abstract create(entity: Partial<T>): T;
+
+  abstract createAll(entities: T[]): T[];
+
+  abstract delete(id: I): void;
+
+  abstract deleteAll(ids: I): void;
+
+  abstract get(id: I): T | null;
+
+  abstract getAll(): T[];
+  abstract getAll(ids: I): T[];
+
+  abstract update(entity: T): T;
+
+  abstract updateAll(entities: T[]): T[];
+
 }

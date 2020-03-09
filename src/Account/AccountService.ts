@@ -1,14 +1,14 @@
-import {Repository} from "../Repository/Repository";
 import {Account} from "./Account";
 import {BehaviorSubject, Observable} from "rxjs";
+import {AccountRepository} from "./AccountRepository";
 
 interface AccountDependencies {
-  accountRepository: Repository<string, Account>;
+  accountRepository: AccountRepository;
 }
 
 export class AccountService {
 
-  private accountRepository: Repository<string, Account>;
+  private accountRepository: AccountRepository;
 
   private accountsSubject: BehaviorSubject<Account[]>;
 
@@ -28,16 +28,12 @@ export class AccountService {
     return newAccount;
   }
 
-  getAllAccounts(): Account[] {
-    return this.accountRepository.getAll();
-  }
-
   observeAccounts(): Observable<Account[]> {
     return this.accountsSubject.asObservable();
   }
 
   private produceAccounts() {
-    this.accountsSubject.next([...this.accountRepository.getAll()]);
+    this.accountsSubject.next(this.accountRepository.getAll());
   }
 
 }
