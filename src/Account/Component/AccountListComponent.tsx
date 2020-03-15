@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Account} from "../Account";
+import {Account} from "../Entity/Account";
 import {AccountComponent} from "./AccountComponent";
 
 interface AccountListComponentProps {

@@ -1,5 +1,5 @@
 import {Command} from "../Command";
-import {AccountService} from "../../Account/AccountService";
+import {AccountService} from "../../Account/Service/AccountService";
 
 interface Dependencies {
   accountService: AccountService;

@@ -1,23 +1,25 @@
-import {Account} from "./Account";
+import {Account} from "../Entity/Account";
 import {BehaviorSubject, Observable} from "rxjs";
-import {AccountRepository} from "./AccountRepository";
+import {AccountRepository} from "../Repository/AccountRepository";
+import {AccountService} from "./AccountService";
 
-interface AccountDependencies {
+interface SimpleAccountServiceDependencies {
   accountRepository: AccountRepository;
 }
 
-export class AccountService {
+export class SimpleAccountService extends AccountService{
 
   private accountRepository: AccountRepository;
 
   private accountsSubject: BehaviorSubject<Account[]>;
 
-  constructor(dependencies: AccountDependencies) {
+  public constructor(dependencies: SimpleAccountServiceDependencies) {
+    super();
     this.accountRepository = dependencies.accountRepository;
     this.accountsSubject = new BehaviorSubject<Account[]>(this.accountRepository.getAll());
   }
 
-  createAccount(name: string, amount = 0): Account {
+  public createAccount(name: string, amount = 0): Account {
     const newAccount = this.accountRepository.create({
       name,
       amount
@@ -28,7 +30,7 @@ export class AccountService {
     return newAccount;
   }
 
-  observeAccounts(): Observable<Account[]> {
+  public observeAccounts(): Observable<Account[]> {
     return this.accountsSubject.asObservable();
   }
 

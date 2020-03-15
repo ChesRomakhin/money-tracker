@@ -1,14 +1,14 @@
 import {ApplicationContext} from "./GreenBean/ApplicationContext/ApplicationContext";
-import {AccountService} from "./Account/AccountService";
-import {AccountInMemoryRepository} from "./Account/AccountInMemoryRepository";
+import {AccountInMemoryRepository} from "./Account/Repository/AccountInMemoryRepository";
 import {Command} from "./Command/Command";
 import {ConsoleTextCommand} from "./Command/Console/ConsoleTextCommand";
 import {SimpleCommandService} from "./Command/Service/SimpleCommandService";
 import {CreateAccountCommand} from "./Command/Create/CreateAccountCommand";
+import {SimpleAccountService} from "./Account/Service/SimpleAccountService";
 
 export const buildContext = () => {
   const context = new ApplicationContext();
-  context.addBeanDefinition("accountService", AccountService, ["accountRepository"]);
+  context.addBeanDefinition("accountService", SimpleAccountService, ["accountRepository"]);
   context.addBeanDefinition("accountRepository", AccountInMemoryRepository, []);
 
   context.addBeanDefinition("consoleTextCommand", ConsoleTextCommand, []);

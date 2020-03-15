@@ -1,4 +1,4 @@
-import {Account} from "./Account";
+import {Account} from "../Entity/Account";
 import {v4} from "uuid";
 import {AccountRepository} from "./AccountRepository";
 
