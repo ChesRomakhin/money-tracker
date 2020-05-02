@@ -19,4 +19,9 @@ export class SimpleCommandService implements CommandService {
     command?.execute(text);
   }
 
+  getApplicableCommands(text: string): string[] {
+    const commands = this.commands.filter(command => command.isApplicable(text));
+    return commands.map(c => (c as object).constructor.name);
+  }
+
 }

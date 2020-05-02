@@ -5,10 +5,11 @@ import {useGreenBean} from "../../GreenBean/React/hook/useGreenBean";
 
 export const CommandInput = () => {
   const [value, setValue] = useState<string>("");
+  const [commands, setCommands] = useState<string>("");
   const commandService = useGreenBean<CommandService>("commandService");
 
   return (<div>
-    <span>privet</span>
+    <span>{commands}</span>
     <form onSubmit={(event) => {
       event.stopPropagation();
       event.preventDefault();
@@ -16,7 +17,10 @@ export const CommandInput = () => {
     }}>
       <input value={value}
              type={"text"}
-             onChange={event => setValue(event.target.value)}/>
+             onChange={event => {
+               setValue(event.target.value);
+               setCommands(commandService?.getApplicableCommands(event.target.value).join(', '));
+             }}/>
     </form>
   </div>);
 };
